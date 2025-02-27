@@ -8,7 +8,7 @@ let project = Project(
             name: "FeatherNotes",
             destinations: Set<Destination>([.iPhone, .iPad]),
             product: .app,
-            bundleId: "dev.pietech.FeatherNotes",
+            bundleId: "dev.pietech.feathernotes",
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
@@ -20,6 +20,9 @@ let project = Project(
             sources: ["FeatherNotes/Sources/**"],
             resources: ["FeatherNotes/Resources/**"],
             dependencies: [
+                .target(name: "FeatherNotesCore"),
+                .target(name: "FeatherNotesCoreUI"),
+                .target(name: "FeatherNotesResources"),
                 .external(name: "Realm"),
                 .external(name: "RealmSwift")
             ]
@@ -28,24 +31,20 @@ let project = Project(
             name: "FeatherNotesCore",
             destinations: Set<Destination>([.iPhone, .iPad]),
             product: .framework,
-            bundleId: "dev.pietech.FeatherNotesCore",
-            infoPlist: .default,
-            sources: ["FeatherNotes/Core/**"],
-            resources: [],
+            bundleId: "dev.pietech.feathernotes.core",
+            sources: ["FeatherNotesCore/**"],
             dependencies: [
-                .target(name: "FeatherNotes")
+                .external(name: "Realm"),
+                .external(name: "RealmSwift")
             ]
         ),
         .target(
             name: "FeatherNotesCoreUI",
             destinations: Set<Destination>([.iPhone, .iPad]),
             product: .framework,
-            bundleId: "dev.pietech.FeatherNotesCoreUI",
-            infoPlist: .default,
-            sources: ["FeatherNotes/CoreUI/**"],
-            resources: [],
+            bundleId: "dev.pietech.feathernotes.coreui",
+            sources: ["FeatherNotesCoreUI/**"],
             dependencies: [
-                .target(name: "FeatherNotes"),
                 .target(name: "FeatherNotesCore"),
                 .target(name: "FeatherNotesResources")
             ]
@@ -53,42 +52,10 @@ let project = Project(
         .target(
             name: "FeatherNotesResources",
             destinations: Set<Destination>([.iPhone, .iPad]),
-            product: .framework,
-            bundleId: "dev.pietech.FeatherNotesResources",
-            infoPlist: .default,
-            sources: ["FeatherNotes/Resources/**"],
-            resources: [],
-            dependencies: [
-                .target(name: "FeatherNotes")
-            ]
-        ),
-        .target(
-            name: "FeatherNotesTests",
-            destinations: Set<Destination>([.iPhone, .iPad]),
-            product: .unitTests,
-            bundleId: "dev.pietech.FeatherNotesTests",
-            infoPlist: .default,
-            sources: ["FeatherNotes/Tests/**"],
-            resources: [],
-            dependencies: [
-                .target(name: "FeatherNotes"),
-                .external(name: "Realm"),
-                .external(name: "RealmSwift")
-            ]
-        ),
-        .target(
-            name: "FeatherNotesUITests",
-            destinations: Set<Destination>([.iPhone, .iPad]),
-            product: .uiTests,
-            bundleId: "dev.pietech.FeatherNotesTests",
-            infoPlist: .default,
-            sources: ["FeatherNotes/UITests/**"],
-            resources: [],
-            dependencies: [
-                .target(name: "FeatherNotes"),
-                .external(name: "Realm"),
-                .external(name: "RealmSwift")
-            ]
-        ),
+            product: .bundle,
+            bundleId: "dev.pietech.feathernotes.resources",
+            resources: ["FeatherNotesResources/**"],
+            dependencies: []
+        )
     ]
 )
